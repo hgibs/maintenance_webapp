@@ -1,3 +1,21 @@
+<?php
+  $debug = False;
+  $sql = "";
+  $result = "";
+  $error = "";
+  $tags;
+  $conn;
+  
+  include "config.php";
+  include "db_connect.php";
+  
+  $title = "SAMPLE TITLE";
+  
+  $unitname = $_GET['u'];
+  
+  include "pages/report-vars.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,7 +25,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
     
-        <title>Head Hunters PMCS Report</title>
+        <title><?php echo $title; ?></title>
 
     <!-- Bootstrap core CSS -->
 <!--     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -17,124 +35,18 @@
     <link href="hh5.css" rel="stylesheet">
     
     <script src="jquery.min.js"></script>
-    <script>
-    $().ready(function() {
-        var nmc = $("#fmc_radio-1");
-        var fmc = $("#fmc_radio-0");
-        var textarea = $("#textarea");
-        
-        nmc.click(function(){
-            textarea.attr("disabled", false);
-            textarea.attr("required", true);
-        });
-        
-        fmc.click(function(){
-            textarea.attr("disabled", true);
-            textarea.attr("required", false);
-        });
-    });
-    </script>
+    <?php include "pages/report-script.php"; ?>
+    
   </head>
 
   <body>
+  <?php 
+//     print_r($_GET);
+    include "pages/report-body.php"; 
+  ?>
     
     
-    <div class="wrapper">
     
-        <?php 
-            $debug = False;
-            $sql = "";
-            $result = "";
-            $error = "";
-            $tags;
-            $conn;
-            include "db_connect.php";
-            include "submit.php"; 
-        ?>
-
-        <form class="form-horizontal" id="pmcsform" action="index.php" method="POST">
-        <fieldset>
-
-            <!-- Form Name -->
-            <legend>Head Hunter PMCS Report</legend>
-
-            <!-- Select Basic -->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="tagselect">Vehicle bumper number</label>
-              <div class="col-md-4">
-                <select id="tagselect" name="tagselect" class="form-control" required>
-                <option value='X' selected>Please select</option>
-                  <?php
-                        foreach($tags as $key => $value){
-                            echo "<option value='" . $key . "'>" . $value . "</option>";
-                        }
-                    ?>
-                </select>
-              </div>
-            </div>
-
-            <!-- Multiple Radios -->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="fmc_radio">Vehicle Status</label>
-              <div class="col-md-4">
-              <div class="radio">
-                <label for="fmc_radio-0">
-                  <input name="fmc_radio" id="fmc_radio-0" value="FMC" type="radio" required>
-                  FMC (Fully Mission Capable)
-                </label>
-                </div>
-              <div class="radio">
-                <label for="fmc_radio-1">
-                  <input name="fmc_radio" id="fmc_radio-1" value="NMC" type="radio">
-                  NMC (Not Mission Capable
-                </label>
-                </div>
-              </div>
-            </div>
-
-            <!-- Textarea -->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="textarea">List the deadlining faults:</label>
-              <div class="col-md-4">                     
-                <textarea class="form-control" id="textarea" name="textarea" value="Enter anything that has an 'X' fault code."></textarea>
-              </div>
-            </div>
-
-            <!-- Multiple Radios -->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="battery_check">Are the battery terminals unplugged?</label>
-              <div class="col-md-4">
-              <div class="radio">
-                <label for="battery_check-0">
-                  <input name="battery_check" id="battery_check-0" value="y" type="radio" required>
-                  YES
-                </label>
-                </div>
-              <div class="radio">
-                <label for="battery_check-1">
-                  <input name="battery_check" id="battery_check-1" value="n" type="radio">
-                  NO
-                </label>
-                </div>
-              </div>
-            </div>
-
-            <!-- Button -->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="final_submit" required>Tap here after PMCS complete</label>
-              <div class="col-md-4">
-                <button id="final_submit" name="final_submit" class="btn btn-primary">PMCS Complete</button>
-              </div>
-            </div>
-
-            </fieldset>
-            </form>
-            
-            <br/>
-            <br/>
-            <!-- <a href="/report.php">Download report here</a> -->
-
-        </div>
         
         <?php 
         if($debug){
