@@ -14,7 +14,7 @@
         <fieldset>
 
             <!-- Form Name -->
-            <legend>Head Hunter PMCS Report</legend>
+            <legend><?php echo $unitname;?> PMCS Report</legend>
 
             <!-- Select Basic -->
             <div class="form-group">

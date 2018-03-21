@@ -19,4 +19,6 @@ if($debuglocal){
   $sqlport = 8889;
 }
 
+$br = "<br />";
+
 ?>
