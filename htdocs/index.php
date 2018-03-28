@@ -23,7 +23,7 @@
   }
   
   if($pagesrc == 1){
-  
+    $title = "Bad Link!";
   
   } elseif($pagesrc == 2){
     include "pages/report-vars.php";

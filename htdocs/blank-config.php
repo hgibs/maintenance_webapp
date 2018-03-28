@@ -24,5 +24,4 @@ if($debuglocal){
 
 $br = "<br />";
 
-require("config-check.php");
 ?>
