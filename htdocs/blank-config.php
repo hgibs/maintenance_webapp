@@ -6,8 +6,8 @@ $debuglocal = True;
 
 // DB variables
 $servername = "";
-$username = "";
-$password = "";
+$dbusername = "";
+$dbpassword = "";
 $dbname = "";
 $sqlport = 80;
 
@@ -16,8 +16,8 @@ $pwddbname = "";
 
 if($debuglocal){
   $servername = "localhost";
-  $username = "root";
-  $password = "root";
+  $dbusername = "root";
+  $dbpassword = "root";
   $dbname = "3187in_maint_backend";
   $sqlport = 8889;
 }

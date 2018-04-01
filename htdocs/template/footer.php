@@ -10,6 +10,7 @@
         } 
 ?>
         
+        <?php /*
         <!-- Start of StatCounter Code  -->
         <script type="text/javascript">
         var sc_project=11460767; 
@@ -27,8 +28,9 @@
         src="//c.statcounter.com/11460767/0/f8ca141b/1/" alt="Web
         Analytics"></a></div></noscript>
         <!-- End of StatCounter Code -->
-        
-        
+        */ ?>
+       
+    </div> <!-- end wrapper div -->   
     </body>
 
 </html>

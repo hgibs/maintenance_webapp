@@ -25,11 +25,15 @@
   require("config.php");
   
   // Create connection
-  $conn = new mysqli($servername, $username, $password, $dbname);
-  $connpwd = new mysqli($servername, $username, $password, $pwddbname);
+  $conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+  $connpwd = new mysqli($servername, $dbusername, $dbpassword, $pwddbname);
 
   if ($conn->connect_errno) {
-      echo "Failed to connect to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_err;
+      echo "Failed to connect to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_err . $br;
+  }
+  
+  if ($connpwd->connect_errno) {
+      echo "Failed to connect to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_err . $br;
   }
   
   if (!($stmt = $conn->prepare("SELECT unit.name, unit.urlname FROM Unit WHERE unit.urlname = ?;"))) {

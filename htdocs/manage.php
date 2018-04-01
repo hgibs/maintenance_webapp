@@ -1,42 +1,153 @@
 <?php
-  $debug = False;
-  $sql = "";
-  $result = "";
-  $error = "";
-  $tags;
-  $conn;
+$debug = False;
+$sql = "";
+$result = "";
+$error = "";
+$tags;
+$conn;
+
+require("config.php");
+require("db_connect.php");
+require("crypto_func.php");
+
+//start or capture session
+session_start();
+
+$title = "Management Page";
   
-  require("config.php");
-  require("db_connect.php");
+
+
+$pagesrc = 0;
+$errormsg = '';
+
+//check if logging in via POST
+if(array_key_exists('username',$_POST) && array_key_exists('passwordinput',$_POST)){
+  //user is logging in
+  $username = $_POST['username'];
+  $password = $_POST['passwordinput'];
   
-  $title = "Management Page";
+  //verify
   
-  //1=choose company
-  //2=report
-  
-  $pagesrc = 1;
-  
-  if(isset($_GET['u'])){
+  $pwdconn = new mysqli($servername, $dbusername, $dbpassword, $pwddbname);
+  $login_result = login($username, $password, $pwdconn);
+  if($login_result){
+    $unitid = $login_result['unitid'];
     
-    $uniturlname = $_GET['u'];
-    $pagesrc = 2;
-  }
-  
-  if($pagesrc == 1){
-    $title = "Bad Link!";
-  
-  } elseif($pagesrc == 2){
-    include "pages/report-vars.php";
-    if(strlen($unitname)<=1){
-      //redirect on no match
-      $pagesrc = 1;
+    if (!($stmt = $conn->prepare("SELECT unit.name, unit.urlname FROM Unit WHERE unit.idUnit = ?;"))) {
+      die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
     }
+    //i int, s string, etc: http://php.net/manual/en/mysqli-stmt.bind-param.php
+    if (!$stmt->bind_param("i", $unitid)) {
+        echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+
+    if (!$stmt->execute()) {
+        echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+    $res = $stmt->get_result();
+    $row = $res->fetch_assoc();
+
+    $stmt->close();
+
+    $_SESSION['unitname'] = $row['name'];
+
+    $title = $row['name'] . " Management";
+  
+    $_SESSION['username'] = $username;
+    $_SESSION['urlname'] = $row['urlname'];
+  } else {
+    $pagesrc = 0; //back to logging in
+    $errormsg = "The information entered did not match our records";
   }
   
+}
+
 /********************************/
-  include "template/head.php";
+include "template/head.php";
 /********************************/
 
+//capture variables from session
+if(array_key_exists('username',$_SESSION) && !empty($_SESSION)) {
+  //session variables exist, so we are logged in
+  $pagesrc=1;
+}
+
+if($pagesrc==0){
+  //require log in
+
+
+  // remove all session variables
+  session_unset(); 
+  
+  //show log in
+  include "template/start-body.php";
+  
+  if(strlen($errormsg>0)){
+  ?>
+    <div class='alert alert-danger'><p><?php echo $errormsg; ?></p></div>
+  <?php
+  }
+  ?>
+  
+  <form class="form-horizontal" action="manage.php" method='POST'>
+    <fieldset>
+
+    <!-- Form Name -->
+    <legend>Please log in to access this page</legend>
+
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="username">Username</label>  
+      <div class="col-md-4">
+      <input id="username" name="username" placeholder="" class="form-control input-md" required="" type="text">
+      <span class="help-block">not your email</span>  
+      </div>
+    </div>
+
+    <!-- Password input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="passwordinput">Password</label>
+      <div class="col-md-4">
+        <input id="passwordinput" name="passwordinput" placeholder="" class="form-control input-md" required="" type="password">
+    
+      </div>
+    </div>
+
+    <!-- Button -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="submitlogin"></label>
+      <div class="col-md-4">
+        <button id="submitlogin" name="submitlogin" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+
+    </fieldset>
+  </form>
+
+  
+  
+  <?php
+  
+  include "template/footer.php";
+} else {
+
+$username = $_SESSION['username'];
+
+/********************************/
+  include "template/start-navbar-body.php";
+/********************************/
+?>
+
+<p>Things to add: add/remove/change bumper number, change password, add/remove user</p>
+
+<?php
+/********************************/
+  include "template/footer.php";
+/********************************/
+$conn->close();
+}
+
+/*
 
 ?>
 
@@ -122,3 +233,6 @@
   </body>
   
 </html>
+<?php
+*/
+?>

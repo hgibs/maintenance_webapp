@@ -1,12 +1,6 @@
 <?php
 // report body
-?>
-
-<div class="wrapper">
-    
-        <?php 
-            
-            
+   
             include "submit.php"; 
         ?>
 
@@ -92,4 +86,4 @@
             <br/>
             <!-- <a href="/report.php">Download report here</a> -->
 
-        </div>
+        

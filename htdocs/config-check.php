@@ -5,9 +5,9 @@
 
   if(strcmp("",$servername)==0) {
     $manychecks = False;
-  } elseif(strcmp("",$username)==0) {
+  } elseif(strcmp("",$dbusername)==0) {
     $manychecks = False;
-  } elseif(strcmp("",$password)==0) {
+  } elseif(strcmp("",$dbpassword)==0) {
     $manychecks = False;
   } elseif(strcmp("",$dbname)==0) {
     $manychecks = False;
@@ -17,7 +17,7 @@
     $manychecks = False;
   }
   
-  if((not $manychecks) or $debuglocal){
+  if(!$manychecks){
     //uh oh - some configs are blank and we aren't in local testing mode
     die("Configuration file is incomplete!! Please contact the site administrator!");
   }

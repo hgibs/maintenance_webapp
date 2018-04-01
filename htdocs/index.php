@@ -45,7 +45,7 @@
   }
     
 /********************************/
-  include "template/head.php";
+  include "template/start-body.php";
 /********************************/
 
 //     print_r($_GET);

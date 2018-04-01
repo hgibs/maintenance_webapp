@@ -1,0 +1,5 @@
+---
+applications:
+- name: webmaint
+  memory: 512M
+  buildpack: php_buildpack

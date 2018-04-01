@@ -5,22 +5,15 @@
 $debuglocal = True;
 
 // DB variables
-$servername = "";
-$username = "";
-$password = "";
-$dbname = "";
-$sqlport = 80;
+$servername = "localhost";
+$dbusername = "root";
+$dbpassword = "root";
+$dbname = "3187in_maint_backend";
+$sqlport = 8889;
+// $sqlport = 80;
 
 // the passwords are held in a separate table for security purposes
-$pwddbname = "";
-
-if($debuglocal){
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $dbname = "3187in_maint_backend";
-  $sqlport = 8889;
-}
+$pwddbname = "3187in_secure_use";
 
 $br = "<br />";
 

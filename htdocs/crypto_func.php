@@ -1,12 +1,14 @@
 <?php
 
-function get_hash($pwd, $salt){
-  $options = [
-    'cost' => 11,
-    'salt' => $salt,
-  ];
+function get_hash($pwd){
+//   $options = [
+//     'cost' => 11,
+//     'salt' => $salt,
+//   ];
   
-  $pwdcode = password_hash($password, PASSWORD_DEFAULT, $options);
+//   $pwdcode = password_hash($pwd, PASSWORD_DEFAULT, $options);
+  $pwdcode = password_hash($pwd, PASSWORD_DEFAULT);
+  //salt is auto generated and stored in returned hash now (php7.0)
   return $pwdcode;
 }
 
@@ -40,18 +42,22 @@ function gen_user($username, $password, $mysqli, $msg) {
 }
 
 function login($username, $password, $mysqli){
-  if($stmt = $mysqli->prepare("SELECT email, password, salt 
-                                FROM Member WHERE username = ? LIMIT 1;")){
+  if($stmt = $mysqli->prepare("SELECT pwd, unit
+                                FROM userpass WHERE username = ? LIMIT 1;")){
     $stmt->bind_param('s', $username);
     $stmt->execute();
     $stmt->store_result();
     
-    $stmt->bind_result($email, $db_password, $salt);
+    $stmt->bind_result($db_password, $unitid);
     $stmt->fetch();
     
+//     $ck_var = array('hashpwd'=>$db_password, 'unitid'=>$unitid);
     
-    
-    $ret_var = array('email'=>$email, 
+    if(password_verify($password, $db_password)) {
+      return array('unitid'=>$unitid);
+    } else {
+      return false;
+    }
     
   } else {
     return false;
@@ -59,11 +65,23 @@ function login($username, $password, $mysqli){
 }
 
 //debug section
-if(true){
-  $bytes = openssl_random_pseudo_bytes(32, $secure_test);
-  echo bin2hex($bytes);
-  echo "<br />";
+if(false){
+//   $bytes = openssl_random_pseudo_bytes(32, $secure_test);
+//   echo bin2hex($bytes);
+//   echo "<br />";
+  $newpwd = "password";
 
-  echo get_hash("password123",$bytes);
+  echo $newpwd . " = ";
+  echo get_hash($newpwd);
+  
+  echo "<br><br>";
+  
+  echo password_verify("password","$2y$10$8J4QRamIR9MqX.TZyJRNV.bQaC50dTVDMRdq88NvxenJ69aDMiBWe");
+  
+  echo "<br><br>";
+  
+  include("config.php");
+  $pwdconn = new mysqli($servername, $username, $password, $pwddbname);
+  print_r(login("testuser","password",$pwdconn));
 }
 ?>
